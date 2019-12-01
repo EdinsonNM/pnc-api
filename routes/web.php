@@ -15,6 +15,7 @@ Route::resource('catalogo','CatalogosController');
 Route::resource('group','GroupsController');
 
 Route::resource('user','UsersController');
+Route::resource('evaluador','EvaluadorsController');
 
 Route::get('/user/login/signin', 'UsersController@signin');
 Route::get('/user/validate/unique/{attribute}', 'UsersController@ValidateUnique');

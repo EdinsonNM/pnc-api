@@ -14,17 +14,17 @@ class User extends Model {
 	public static $update_rules = array();
 
 	public function perfil(){
-		return $this->belongsTo('Group', 'group_id', 'id');
+		return $this->belongsTo('App\models\Group', 'group_id', 'id');
 	}
 
 	public function postulante()
     {
-        return $this->hasOne('Postulante','usuario_id','id');
+        return $this->hasOne('App\models\Postulante','usuario_id','id');
     }
 
     public function evaluador()
     {
-        return $this->hasOne('Evaluador','usuario_id','id');
+        return $this->hasOne('App\models\Evaluador','usuario_id','id');
     }
     public static function createEvaluador(){
 

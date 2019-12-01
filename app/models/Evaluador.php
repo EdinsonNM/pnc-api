@@ -12,27 +12,27 @@ class Evaluador extends Model {
 	protected $fillable = array('id','usuario_id','catalogo_tsx_id','disponibleviaje','nombres','apellidos','numdoc','email1','email2','direccion','telefono','celular','profesion','especializacion','cargo','empresa','direccionempresa','distritoemp','telefonoemp','faxemp','emailemp');
 
 	public function usuario(){
-		return $this->belongsTo('User', 'usuario_id', 'id');
+		return $this->belongsTo('App\models\User', 'usuario_id', 'id');
 	}
 
 	public function sexo(){
-		return $this->belongsTo('Catalogo', 'catalogo_tsx_id', 'id');
+		return $this->belongsTo('App\models\Catalogo', 'catalogo_tsx_id', 'id');
 	}
 
 	public function disponibilidades(){
-		return $this->hasMany('EvaluadorDisponibilidad','evaluador_id','id');
+		return $this->hasMany('App\models\EvaluadorDisponibilidad','evaluador_id','id');
 	}
 
 	public function gruposevaluacion(){
-		return $this->hasMany('GrupoEvaluacionEvaluador','evaluador_id','id');
+		return $this->hasMany('App\models\GrupoEvaluacionEvaluador','evaluador_id','id');
 	}
 
 	public function conflictosinteres(){
-		return $this->hasMany('ConflictoInteresEvaluador','evaluador_id','id');
+		return $this->hasMany('App\models\ConflictoInteresEvaluador','evaluador_id','id');
 	}
 
 	public function inscripciones(){
-		return $this->hasMany('InscripcionEvaluador','evaluador_id','id');
+		return $this->hasMany('App\models\InscripcionEvaluador','evaluador_id','id');
 	}
 
 }

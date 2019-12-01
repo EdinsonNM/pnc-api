@@ -9,7 +9,7 @@ class Group extends Model {
 	protected $fillable = array();
 
 	public function accesos(){
-        return $this->hasMany('Acceso', 'perfil_id','id');
+        return $this->hasMany('App\models\Acceso', 'perfil_id','id');
     }
 
 }

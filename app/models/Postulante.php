@@ -13,17 +13,17 @@ class Postulante extends Model {
 	protected $fillable =array('id','web','telefono','ruc','razonsocial','fax','direccion');
 
 	public function usuario(){
-		return $this->belongsTo('User', 'usuario_id', 'id');
+		return $this->belongsTo('App\models\User', 'usuario_id', 'id');
 	}
 
 	public function categorias()
     {
-        return $this->hasMany('PostulanteCategoria','postulante_id','id');
+        return $this->hasMany('App\models\PostulanteCategoria','postulante_id','id');
     }
 
     public function contactos()
     {
-        return $this->hasMany('PostulanteContacto','postulante_id','id');
+        return $this->hasMany('App\models\PostulanteContacto','postulante_id','id');
     }
 
 }

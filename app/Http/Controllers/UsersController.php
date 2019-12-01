@@ -17,7 +17,22 @@ use App\Http\Controllers\Controller;
 class UsersController extends Controller
 {
     public $salt='$6$rounds=1000$YourSaltyStringz$';
-  public function signin(Request $request){
+    public function show($id)
+	{
+		$user = User::with('perfil')
+		->with(array('postulante'=>function($q){
+			return $q->with('categorias')
+				->with(array('contactos'=>function($q){
+					return $q->with('TipoContacto');
+				}));
+		}))
+		->with('evaluador')
+		->findOrFail($id);
+
+		return Response()->json($user,200);
+    }
+
+    public function signin(Request $request){
 		$success=false;
 		$message="";
 		$entity=null;
