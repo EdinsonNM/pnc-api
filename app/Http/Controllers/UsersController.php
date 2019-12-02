@@ -11,12 +11,121 @@ use App\models\Postulante;
 
 use Illuminate\Http\Request;
 use App\Mail\MessageUserActivated;
+use Illuminate\Support\Facades\DB;
 use App\Mail\MessageUserRegistered;
 use App\Http\Controllers\Controller;
+use App\models\InscripcionEvaluador;
 
 class UsersController extends Controller
 {
     public $salt='$6$rounds=1000$YourSaltyStringz$';
+    public function index(Request $request)
+	{
+		$filter=$request->query("filter");
+		$name=(!isset($filter['name']))?'':$filter['name'];
+		$username=(!isset($filter['username']))?'':$filter['username'];
+		$group_id=(!isset($filter['group_id']))?'':$filter['group_id'];
+		$email=(!isset($filter['email']))?'':$filter['email'];
+		$postulante_telefono=(!isset($filter['postulante.telefono']))?'':$filter['postulante.telefono'];
+		$postulante_ruc=(!isset($filter['postulante.ruc']))?'':$filter['postulante.ruc'];
+		$postulante_razonsocial=(!isset($filter['postulante.razonsocial']))?'':$filter['postulante.razonsocial'];
+		$evaluador_nombres=(!isset($filter['evaluador.nombres']))?'':$filter['evaluador.nombres'];
+		$evaluador_apellidos=(!isset($filter['evaluador.apellidos']))?'':$filter['evaluador.apellidos'];
+		$evaluador_email=(!isset($filter['evaluador_email']))?'':$filter['evaluador_email'];
+		$evaluador_profesion=(!isset($filter['evaluador.profesion']))?'':$filter['evaluador.profesion'];
+		$evaluador_empresa=(!isset($filter['evaluador.empresa']))?'':$filter['evaluador.empresa'];
+		$evaluador_celular=(!isset($filter['evaluador.celular']))?'':$filter['evaluador.celular'];
+		$evaluador_direccion=(!isset($filter['evaluador.direccion']))?'':$filter['evaluador.direccion'];
+		$onlyactive=$request->query('onlyactive','false');
+		$onlyactive=($onlyactive=='true')?true:false;
+		$ids=array();
+		if($onlyactive){
+			$ids=$this->OnlyActive();
+		}
+
+		$users = User::with('perfil')
+		->select(DB::raw('users.*'))
+		->with('postulante')
+		->with('evaluador')
+		->leftJoin('postulante','postulante.usuario_id','=','users.id')
+		->leftJoin('evaluador','evaluador.usuario_id','=','users.id')
+
+		->where(function($q) use($ids,$name,$username,$email,$group_id,$postulante_telefono,$postulante_ruc,$postulante_razonsocial,$evaluador_nombres,$evaluador_email,$evaluador_profesion,$evaluador_empresa,$evaluador_celular,$evaluador_apellidos,$evaluador_direccion){
+			if(count($ids)>0){
+				$q=$q->whereIn('users.id',$ids);
+			}
+			if($name!='')
+				$q=$q->where('first_name','like','%'.$name.'%')->orWhere('last_name','like','%'.$name.'%');
+
+			if($email!='')
+				$q=$q->where('email','like',"%$email%");
+
+			if($group_id!='')
+				$q=$q->where('group_id','=',$group_id);
+
+			if($username!='')
+				$q=$q->where('username','like','%'.$username.'%');
+
+			if($postulante_telefono!='')
+				$q=$q->where('postulante.telefono','like','%'.$postulante_telefono.'%');
+
+			if($postulante_ruc!='')
+				$q=$q->where('postulante.ruc','like','%'.$postulante_ruc.'%');
+
+			if($postulante_razonsocial!='')
+				$q=$q->where('postulante.razonsocial','like','%'.$postulante_razonsocial.'%');
+
+			if($evaluador_nombres!='')
+				$q=$q->where('evaluador.nombres','like','%'.$evaluador_nombres.'%');
+
+			if($evaluador_apellidos!='')
+				$q=$q->where('evaluador.apellidos','like','%'.$evaluador_apellidos.'%');
+
+			/*if($evaluador_email!='')
+				$q=$q->where('evaluador.emailemp','like','%'.$evaluador_emailemp.'%');*/
+
+			if($evaluador_email!='')
+				$q=$q->where(function($query) use($evaluador_email){
+					return $query->orWhere('evaluador.emailemp','like','%'.$evaluador_email.'%')
+						->orWhere('evaluador.email1','like','%'.$evaluador_email.'%')
+						->orWhere('evaluador.email2','like','%'.$evaluador_email.'%')
+						->orWhere('email','like','%'.$evaluador_email.'%');
+				});
+
+			if($evaluador_empresa!='')
+				$q=$q->where('evaluador.empresa','like','%'.$evaluador_empresa.'%');
+
+			if($evaluador_profesion!='')
+				$q=$q->where('evaluador.profesion','like','%'.$evaluador_profesion.'%');
+
+			if($evaluador_celular!='')
+				$q=$q->where('evaluador.celular','like','%'.$evaluador_celular.'%');
+
+			if($evaluador_direccion!='')
+				$q=$q->where('evaluador.direccion','like','%'.$evaluador_direccion.'%');
+
+			return $q;
+		})->paginate($request->query('count'));
+
+		return Response()->json($users,200);
+    }
+
+    public function OnlyActive()
+	{
+		$entities=InscripcionEvaluador::select("evaluador.*")
+            ->join('evaluador','evaluador.id','=','inscripcionevaluador.evaluador_id')
+            ->join('concurso','concurso.id','=','inscripcionevaluador.concurso_id')
+            ->where('concurso.estado','=','1')
+            ->distinct()
+            ->get();
+        $ids=array();
+        foreach ($entities as $entity) {
+        	 $ids[]= $entity->usuario_id;
+        }
+        //var_dump($ids);die();
+        return $ids;
+
+	}
     public function show($id)
 	{
 		$user = User::with('perfil')

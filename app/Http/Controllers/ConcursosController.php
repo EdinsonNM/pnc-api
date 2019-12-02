@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\models\Catalogo;
 use Validator;
+use App\models\Catalogo;
+use App\models\Concurso;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 
 class ConcursosController extends Controller {
@@ -144,7 +145,7 @@ class ConcursosController extends Controller {
 		return Response()->json(array('success' => $success, 'message'=>$message),200);
 	}
 
-	public function concursosPostulante(){
+	public function concursosPostulante(Request $request){
 		$postulante_id=$request->query('postulante_id','');
 		$entities = Concurso::with('tipo_concurso')
 		->with(array('inscripciones'=>function($q) use($postulante_id){
@@ -157,7 +158,7 @@ class ConcursosController extends Controller {
 		return Response()->json($entities,200);
 	}
 
-	public function concursosEvaluador(){
+	public function concursosEvaluador(Request $request){
 		$evaluador_id=$request->query('evaluador_id','');
 		$entities = Concurso::with('tipo_concurso')
 		->with(array('inscripcionesevaluador'=>function($q) use($evaluador_id){
@@ -170,7 +171,7 @@ class ConcursosController extends Controller {
 		return Response()->json($entities,200);
 	}
 
-	public function CopyCriterios(){
+	public function CopyCriterios(Request $request){
 		$success=false;
 		$idorigen=$request->query('idorigen',0);
 		$iddestino=$request->query('iddestino',0);

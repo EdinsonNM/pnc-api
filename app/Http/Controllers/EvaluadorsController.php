@@ -5,6 +5,7 @@ use Validator;
 use App\models\Evaluador;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\models\InscripcionEvaluador;
 
 class EvaluadorsController extends Controller {
 
