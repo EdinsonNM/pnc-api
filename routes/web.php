@@ -31,9 +31,18 @@ Route::resource('respuesta','RespuestasController');
 Route::resource('puntaje','PuntajesController');
 Route::resource('criteriovisita','CriterioVisitasController');
 Route::resource('criterioaspectoclave','CriterioAspectoClavesController');
+Route::resource('evaluadorhistorial','EvaluadorHistorialsController');
 
 
 //Route::resource('grupoevaluacionevaluadorpermiso','GrupoEvaluacionEvaluadorPermisosController');
+//user custom endpoints
+Route::get('/user/resetpassword/request', 'UsersController@ResetPassword');
+Route::get('/user/resetpassword/confirmed', 'UsersController@ConfirmedResetPassword');
+Route::get('/user/resetpassword/find', 'UsersController@findUserByPasswordCode');
+Route::get('/user/login/signin', 'UsersController@signin');
+Route::get('/user/validate/unique/{attribute}', 'UsersController@ValidateUnique');
+Route::post('/user/access/activation', 'UsersController@activatedUser');
+Route::get('/user/change/password', 'UsersController@ChangeUserPassword');
 
 //concurso custom endpoints
 Route::get('concurso/postulante/inscripcion','ConcursosController@concursosPostulante');
@@ -41,10 +50,7 @@ Route::get('concurso/evaluador/inscripcion','ConcursosController@concursosEvalua
 Route::post('concurso/copy/criterios','ConcursosController@CopyCriterios');
 Route::post('concurso/cierre/{id}','ConcursosController@CierreConcurso');
 
-//user custom endpoints
-Route::get('/user/login/signin', 'UsersController@signin');
-Route::get('/user/validate/unique/{attribute}', 'UsersController@ValidateUnique');
-Route::post('/user/access/activation', 'UsersController@activatedUser');
+
 
 
 // grupoevaluación custom endpoints
@@ -60,10 +66,11 @@ Route::get('concursocriterio/report/excel','ConcursoCriteriosController@reportEx
 //criterioaspectosclave custom endpoints
 Route::get('criterioaspectoclave/list/disponibles','CriterioAspectoClavesController@disponibles');
 
+//evaluador custom endpoints
+Route::get('evaluador/method/history','EvaluadorsController@History');
 
 //reportes custom endpoints
 Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualCuaderno');
-
 Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualCuaderno');
 Route::get('reportes/evaluacion-individual-factores-clave','ReportesController@getEvaluacionIndividualFactoresClave');
 Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualResumen');
@@ -73,13 +80,8 @@ Route::get('reportes/resumen-aprobacion-concenso','ReportesController@getResumen
 Route::post('reportes/export-excel','ReportesController@postExportExcel');
 Route::post('reportes/export-word','ReportesController@postExportWord');
 Route::get('reportes/evaluacion-factores-clave','ReportesController@getEvaluacionFactoresClave');
-
-
 Route::get('reportes/seguimiento-evaluadores','ReportesController@getSeguimientoEvaluadores');
-
 Route::get('reportes/evaluacion-consenso-por-equipo','ReportesController@getEvaluacionConsensoPorEquipo');
-
-
 Route::get('reportes/evaluacion-temas-visita','ReportesController@getEvaluacionTemasVisita');
 Route::get('reportes/evaluacion-por-equipo','ReportesController@getEvaluacionPorEquipo');
 Route::get('reportes/informe-retroalimentacion','ReportesController@getInformeRetroalimentacion');

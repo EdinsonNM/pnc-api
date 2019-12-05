@@ -10,6 +10,7 @@ use App\models\Evaluador;
 use App\models\Postulante;
 
 use Illuminate\Http\Request;
+use App\Mail\MessageResetPassword;
 use App\Mail\MessageUserActivated;
 use Illuminate\Support\Facades\DB;
 use App\Mail\MessageUserRegistered;
@@ -18,7 +19,7 @@ use App\models\InscripcionEvaluador;
 
 class UsersController extends Controller
 {
-    public $salt='$6$rounds=1000$YourSaltyStringz$';
+    public $salt='$6$rounds=1000$pncorgpewapp2019$';
     public function index(Request $request)
 	{
 		$filter=$request->query("filter");
@@ -239,4 +240,83 @@ class UsersController extends Controller
         return Response()->json(array('success' => $success, 'message'=>$message), 200);
 
     }
+
+    public function ResetPassword(Request $request){
+		$email=$request->query('email');
+		$message='';
+		$success=false;
+
+        $user=User::where('email','=',$email)->first();
+        if($user){
+            $user->reset_password_code =  uniqid('pwd_');
+            $user->save();
+            $success=true;
+            Mail::to($email)->send(new MessageResetPassword($user));
+
+        }else{
+            $message="El correo ingresado no ha sido encontrado";
+        }
+
+		return Response()->json(array('success'=>$success,'message'=>$message, 'user'=>$email), 200);
+    }
+
+
+    public function findUserByPasswordCode(Request $request){
+		$usuario=null;
+		$message='';
+		$success=false;
+        $resetcode=$request->query('reset_password_code','');
+        $user=User::where('reset_password_code','=',$resetcode)->first();
+        if($user){
+            $success=true;
+        }else{
+            $message='Usuario no encontrado.';
+        }
+
+		return Response()->json(array('success'=>$success,'message'=>$message,'entity'=>$user), 200);
+	}
+
+	public function ConfirmedResetPassword(Request $request){
+		$message='';
+		$success=false;
+		$resetcode=$request->query('resetcode');
+        $password=$request->query('password');
+        $user=User::where('reset_password_code','=',$resetcode)->first();
+        if($user){
+            $user->password = crypt($password, $this->salt);
+            $user->reset_password_code = null;
+            $success=true;
+            $user->save();
+        }else{
+            $message='Código de reseteo es invalido o a expirado';
+        }
+
+		return Response()->json(array('success'=>$success,'message'=>$message), 200);
+
+    }
+
+    public function ChangeUserPassword(Request $request){
+		$username=$request->query('username');
+		$current_password=$request->query('current_password');
+		$password=$request->query('password');
+		$confirm_password=$request->query('confirm_password');
+		$success=false;
+
+        if($password==$confirm_password){
+            $user = User::where('username','=',$username)->where('password','=', crypt($current_password, $this->salt));
+            if($user){
+                $user->password=crypt($password, $this->salt);
+                $message="Cambio de contraseña satisfactorio";
+                $success=true;
+            }else{
+                $message='Usuario no encontrado.';
+            }
+
+
+        }else{
+            $message="Contraseñas no son identicas";
+        }
+
+		return Response()->json(array('success'=>$success,'message'=>$message), 200);
+	}
 }

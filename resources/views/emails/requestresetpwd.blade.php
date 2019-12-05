@@ -5,14 +5,13 @@
 </head>
 <body>
 	<h2>Cambio de Contraseña</h2>
-
 	<div>
-		Estimado {{$nombres}},<br>
+		Estimado {{$msg["first_name"]}},<br>
 		Recibimos una solicitud de cambio de contraseña. Para confirmar tu nueva contraseña haz click en el siguiente enlace:
 		<br>
 		<br>
-		Usuario: {{$username}} <br>
-		<a href="http://concurso.pnc.org.pe/#/access/changepwd/{{$resetcode}}">http://concurso.pnc.org.pe/#/access/changepwd/{{$resetcode}}</a>
+		Usuario: {{$msg["username"]}} <br>
+		<a href="{{env('APP_URL')}}/#/access/changepwd/{{$msg["reset_password_code"]}}">http://concurso.pnc.org.pe/#/access/changepwd/{{$msg["reset_password_code"]}}</a>
 
 		<br><br>
 		Atentamente,<br>
