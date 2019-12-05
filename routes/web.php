@@ -45,6 +45,7 @@ Route::post('/user/access/activation', 'UsersController@activatedUser');
 Route::get('/user/change/password', 'UsersController@ChangeUserPassword');
 
 //concurso custom endpoints
+
 Route::get('concurso/postulante/inscripcion','ConcursosController@concursosPostulante');
 Route::get('concurso/evaluador/inscripcion','ConcursosController@concursosEvaluador');
 Route::post('concurso/copy/criterios','ConcursosController@CopyCriterios');
