@@ -87,3 +87,4 @@ Route::get('reportes/evaluacion-temas-visita','ReportesController@getEvaluacionT
 Route::get('reportes/evaluacion-por-equipo','ReportesController@getEvaluacionPorEquipo');
 Route::get('reportes/informe-retroalimentacion','ReportesController@getInformeRetroalimentacion');
 Route::get('reportes/seguimiento-encuesta','ReportesController@getSeguimientoEncuesta');
+//desarrollador por Edinson
