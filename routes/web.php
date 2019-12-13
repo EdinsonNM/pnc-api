@@ -22,7 +22,6 @@ Route::resource('grupoevaluacion','GrupoEvaluacionsController');
 Route::resource('grupoevaluacionpostulante','GrupoEvaluacionPostulantesController');
 Route::resource('grupoevaluacionevaluador','GrupoEvaluacionEvaluadorsController');
 
-Route::resource('encuestas', 'EncuestasController');
 Route::resource('etapa','EtapasController');
 Route::resource('etapaconcurso','EtapaConcursosController');
 Route::resource('evaluacion','EvaluacionsController');
@@ -33,6 +32,11 @@ Route::resource('criteriovisita','CriterioVisitasController');
 Route::resource('criterioaspectoclave','CriterioAspectoClavesController');
 Route::resource('evaluadorhistorial','EvaluadorHistorialsController');
 
+Route::resource('encuestas', 'EncuestasController');
+Route::resource('encuestapreguntas', 'EncuestaPreguntasController');
+Route::resource('encuestapreguntaopciones', 'EncuestaPreguntaOpcionsController');
+Route::resource('encuestaevaluaciones', 'EncuestaEvaluacionsController');
+Route::resource('encuestaevaluacionrespuestas', 'EncuestaEvaluacionRespuestasController');
 
 //Route::resource('grupoevaluacionevaluadorpermiso','GrupoEvaluacionEvaluadorPermisosController');
 //user custom endpoints
@@ -88,3 +92,4 @@ Route::get('reportes/evaluacion-por-equipo','ReportesController@getEvaluacionPor
 Route::get('reportes/informe-retroalimentacion','ReportesController@getInformeRetroalimentacion');
 Route::get('reportes/seguimiento-encuesta','ReportesController@getSeguimientoEncuesta');
 //desarrollador por Edinson
+

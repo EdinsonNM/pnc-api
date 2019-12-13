@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use view;
 use Validator;
 use App\models\Catalogo;
 use App\models\Concurso;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\models\GrupoEvaluacionEvaluador;
 use App\models\GrupoEvaluacionPostulante;
+use Illuminate\Support\Facades\Response;
 
 class ReportesController extends Controller {
 
@@ -222,17 +224,17 @@ class ReportesController extends Controller {
 	}
 
 
-		public function postExportExcel(Request $request){
+	public function postExportExcel(Request $request){
         $statusCode=200;
-        $data=($request->query('data_download'));
-        $contents = View::make('downloadTable')->with('data', $data);
-        $response = Response::make($contents, $statusCode);
-        $response->header('Content-Type', 'application/vnd.ms-excel;');
-        $response->header('Content-Disposition', 'attachment; filename="report.xls"');
-        return $response;
+        $content=$request->all();
+        $data=$content['data_download'];
+        $contents = view('downloadTable')->with('data', $data);
+        return Response($contents)
+            ->header('Content-Type', 'application/vnd.ms-excel;')
+            ->header('Content-Disposition', 'attachment; filename="report.csv"');
     }
 
-		public function postExportWord(Request $request){
+	public function postExportWord(Request $request){
         $statusCode=200;
         $data=($request->query('data_download_word'));
         $contents = View::make('downloadTable')->with('data', $data);
