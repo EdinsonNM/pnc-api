@@ -7,6 +7,7 @@ use App\models\Catalogo;
 use App\models\Concurso;
 use App\models\Evaluacion;
 use App\models\Inscripcion;
+use App\Exports\ExportExcel;
 use Illuminate\Http\Request;
 use App\models\CriterioInforme;
 use App\models\GrupoEvaluacion;
@@ -14,9 +15,10 @@ use App\models\ConcursoCriterio;
 use App\models\CriterioAprobacion;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 use App\models\GrupoEvaluacionEvaluador;
-use App\models\GrupoEvaluacionPostulante;
 use Illuminate\Support\Facades\Response;
+use App\models\GrupoEvaluacionPostulante;
 
 class ReportesController extends Controller {
 
@@ -226,12 +228,10 @@ class ReportesController extends Controller {
 
 	public function postExportExcel(Request $request){
         $statusCode=200;
-        $content=$request->all();
-        $data=$content['data_download'];
-        $contents = view('downloadTable')->with('data', $data);
-        return Response($contents)
-            ->header('Content-Type', 'application/vnd.ms-excel;')
-            ->header('Content-Disposition', 'attachment; filename="report.csv"');
+        $data=$request->input('data_download');
+        return Excel::download(new ExportExcel($data), 'reporte.xlsx');
+
+
     }
 
 	public function postExportWord(Request $request){

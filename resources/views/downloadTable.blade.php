@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
+	<title>Reporte</title>
 <style>
 .text-center{
 	text-align: center;
@@ -2563,6 +2563,9 @@ input[type="button"].btn-block {
 </style>
 </head>
 <body>
-	{{$data}}
+<table>
+<tr><td>HOLAAAA</td></tr>
+</table>
+	{!! $data !!}
 </body>
 </html>

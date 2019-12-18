@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 use Validator;
 use App\models\Catalogo;
 use App\models\Concurso;
+use App\models\Inscripcion;
 use Illuminate\Http\Request;
+use App\models\ConcursoCriterio;
 use App\Http\Controllers\Controller;
+use App\models\InscripcionEvaluador;
 
 
 class ConcursosController extends Controller {

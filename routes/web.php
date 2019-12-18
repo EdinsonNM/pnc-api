@@ -37,8 +37,15 @@ Route::resource('encuestapreguntas', 'EncuestaPreguntasController');
 Route::resource('encuestapreguntaopciones', 'EncuestaPreguntaOpcionsController');
 Route::resource('encuestaevaluaciones', 'EncuestaEvaluacionsController');
 Route::resource('encuestaevaluacionrespuestas', 'EncuestaEvaluacionRespuestasController');
+Route::resource('postulante','PostulantesController');
+Route::resource('inscripcion','InscripcionsController');
+Route::resource('menu','MenusController');
+Route::resource('grupoevaluacionevaluadorpermiso','GrupoEvaluacionEvaluadorPermisosController');
+Route::resource('concursocriterio','ConcursoCriteriosController');
+Route::resource('postulantecategoria','PostulanteCategoriasController');
+Route::resource('postulantecontacto','PostulanteContactosController');
+Route::resource('conflictointeresevaluador','ConflictoInteresEvaluadorsController');
 
-//Route::resource('grupoevaluacionevaluadorpermiso','GrupoEvaluacionEvaluadorPermisosController');
 //user custom endpoints
 Route::get('/user/resetpassword/request', 'UsersController@ResetPassword');
 Route::get('/user/resetpassword/confirmed', 'UsersController@ConfirmedResetPassword');
@@ -91,5 +98,20 @@ Route::get('reportes/evaluacion-temas-visita','ReportesController@getEvaluacionT
 Route::get('reportes/evaluacion-por-equipo','ReportesController@getEvaluacionPorEquipo');
 Route::get('reportes/informe-retroalimentacion','ReportesController@getInformeRetroalimentacion');
 Route::get('reportes/seguimiento-encuesta','ReportesController@getSeguimientoEncuesta');
-//desarrollador por Edinson
 
+//impactoproyecto
+Route::post('/impactoproyecto/methods/multiple-save', 'ImpactoproyectosController@multipleSave');
+
+//upload
+Route::post('upload/evaluador-curriculum','UploadController@postEvaluadorCurriculum');
+Route::post('upload/inscripcion-completo','UploadController@postInscripcionCompleto');
+Route::post('upload/inscripcion-basico','UploadController@postInscripcionBasico');
+Route::post('upload/user-photo','UploadController@postUserPhoto');
+
+//evaluación
+Route::post('evaluacion/method/cierre','EvaluacionsController@CierreEvaluacion');
+Route::post('evaluacion/method/abrir','EvaluacionsController@AbrirEvaluacion');
+Route::post('evaluacion/method/import','EvaluacionsController@ImportDataEtapaAnterior');
+
+//evaluador
+Route::get('evaluador/method/history','EvaluadorsController@History');

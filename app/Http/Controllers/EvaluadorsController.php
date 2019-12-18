@@ -6,6 +6,7 @@ use App\models\Evaluador;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\InscripcionEvaluador;
+use App\models\GrupoEvaluacionEvaluador;
 
 class EvaluadorsController extends Controller {
 
