@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\models\Catalogo;
 use Validator;
+use App\models\Catalogo;
+use App\models\Inscripcion;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UploadController extends Controller {
 	protected $urlEvaluador="upload/evaluador/";

@@ -1,10 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\models\Catalogo;
 use Validator;
+use App\models\Catalogo;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\models\InscripcionEvaluador;
+
 class InscripcionEvaluadorsController extends Controller {
 
 
@@ -14,7 +16,7 @@ class InscripcionEvaluadorsController extends Controller {
 		$entity=null;
 		$success=false;
 		$message='';
-		$validator = Validator::make($data = Input::all(), InscripcionEvaluador::$rules);
+		$validator = Validator::make($data = $request->all(), InscripcionEvaluador::$rules);
 
 		if (!$validator->fails())
 		{
@@ -30,7 +32,7 @@ class InscripcionEvaluadorsController extends Controller {
 	{
 		$inscripcionevaluador = Inscripcionevaluador::findOrFail($id);
 
-		$validator = Validator::make($data = Input::all(), Inscripcionevaluador::$rules);
+		$validator = Validator::make($data = $request->all(), Inscripcionevaluador::$rules);
 
 		if ($validator->fails())
 		{

@@ -31,4 +31,11 @@ class MessageUserActivated extends Mailable
     {
         return $this->view('emails.infoactivation');
     }
+    public function handle(MessageSending $event)
+    {
+        $headers = $event->message->getHeaders();
+        $headers->addTextHeader('X-Priority', '1');
+		$headers->addTextHeader('X-MSMail-Priority', 'High');
+		$headers->addTextHeader('X-Mailer', 'Widgets.com Server');
+    }
 }

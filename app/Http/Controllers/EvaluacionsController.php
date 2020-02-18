@@ -43,7 +43,7 @@ class EvaluacionsController extends Controller {
 	{
 		$entity=null;
 		$success=false;
-		$validator = Validator::make($data = Input::all(), Evaluacion::$rules);
+		$validator = Validator::make($data = $request->all(), Evaluacion::$rules);
 
 		if (!$validator->fails())
 		{
@@ -66,7 +66,7 @@ class EvaluacionsController extends Controller {
 	{
 		$evaluacion = Evaluacion::findOrFail($id);
 
-		$validator = Validator::make($data = Input::all(), Evaluacion::$rules);
+		$validator = Validator::make($data = $request->all(), Evaluacion::$rules);
 
 		if ($validator->fails())
 		{
@@ -89,10 +89,10 @@ class EvaluacionsController extends Controller {
 	{
 		$ETAPA_RETRO=18;
 		$success=false;
-		$evaluador_id=$request->query('evaluador_id','');
-		$inscripcion_id=$request->query('inscripcion_id','');
-		$tipoetapa_id=$request->query('tipoetapa_id','');
-		$grupoevaluacion_id=$request->query('grupoevaluacion_id','');
+		$evaluador_id=$request->input('evaluador_id','');
+		$inscripcion_id=$request->input('inscripcion_id','');
+		$tipoetapa_id=$request->input('tipoetapa_id','');
+		$grupoevaluacion_id=$request->input('grupoevaluacion_id','');
 
 
 		$evaluadores = GrupoEvaluacionEvaluador::with('inscripcion')->where('grupoevaluacion_id','=',$grupoevaluacion_id)->get();
@@ -192,16 +192,16 @@ class EvaluacionsController extends Controller {
 
 		//$queries = DB::getQueryLog();
 		//return Response()->json($queries, 200);
-		return Response()->json(array('result'=>$result,'success'=>$success),200);
+		return Response()->json(array('result'=>$result,'success'=>$success, 'evaluacion'=> $evaluacion),200);
 	}
 
 	public function ImportDataEtapaAnterior(Request $request)
 	{
-		$tipoetapaanterior_id=$request->query('tipoetapaanterior_id','');
+		$tipoetapaanterior_id=$request->post('tipoetapaanterior_id','');
 
-		$inscripcion_id=$request->query('inscripcion_id','');
-		$tipoetapa_id=$request->query('tipoetapa_id','');
-		$evaluacion_id=$request->query('evaluacion_id','');
+		$inscripcion_id=$request->post('inscripcion_id','');
+		$tipoetapa_id=$request->post('tipoetapa_id','');
+		$evaluacion_id=$request->post('evaluacion_id','');
 		$success=false;
 		$evaluacion=Evaluacion::find($evaluacion_id);
 		if($evaluacion)
@@ -387,9 +387,9 @@ class EvaluacionsController extends Controller {
 	public function AbrirEvaluacion(Request $request)
 	{
 		$success=false;
-		$evaluador_id=$request->query('evaluador_id','');
-		$inscripcion_id=$request->query('inscripcion_id','');
-		$tipoetapa_id=$request->query('tipoetapa_id','');
+		$evaluador_id=$request->post('evaluador_id','');
+		$inscripcion_id=$request->post('inscripcion_id','');
+		$tipoetapa_id=$request->post('tipoetapa_id','');
 		if($evaluador_id!=''&&$inscripcion_id!=''&&$tipoetapa_id!=''){
 			$evaluacion = Evaluacion::where(function($q) use($evaluador_id,$inscripcion_id,$tipoetapa_id){
 				if($evaluador_id!=''){

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Mail\MessageUserRegistered;
 use App\Http\Controllers\Controller;
 use App\models\InscripcionEvaluador;
+use DateTime;
 
 class UsersController extends Controller
 {
@@ -178,6 +179,42 @@ class UsersController extends Controller
 
 		return Response()->json(array('success' => $success, 'entity'=>$entity,'message'=>$message), 201);
     }
+    public function update(Request $request, $id)
+	{
+		$message='';
+		$success=false;
+        $user = User::where('id','=',$id)->first();
+        if($user){
+            $validator = Validator::make($data = $request->all(), User::$update_rules);
+
+            if (!$validator->fails())
+            {
+
+                $user->email=$data['email'];
+                $user->first_name=$data['first_name'];
+                $user->last_name=$data['last_name'];
+                $user->nrodocumento=$data['nrodocumento'];
+                $user->tipodocumento_id=$data['tipodocumento_id'];
+                $user->username=$data['username'];
+
+                if(array_key_exists('password', $data) && $data['password']!=''){
+                    $data['password'] = crypt($data['password'], $this->salt);
+                    $user->password= $data['password'];
+                }
+                $user->update();
+
+                $success=true;
+                $usuario=$user->toArray();
+
+            }else{
+                $message = $validator->messages();
+            }
+
+            return Response()->json(array('success' => $success, 'entity'=>$usuario,'message'=>$message), 201);
+        }else{
+            abort(404);
+        }
+	}
 
     public function ValidateUnique(Request $request, $attribute){
 		$value=$request->query('value');
@@ -318,5 +355,123 @@ class UsersController extends Controller
         }
 
 		return Response()->json(array('success'=>$success,'message'=>$message), 200);
+    }
+
+    public function logout(){
+		$success=false;
+		$message="";
+		if (true)
+		{
+			$success=true;
+		}else{
+			$message="No existe un usuario logueado en el sistema";
+		}
+
+		return Response()->json(array('success' => $success, 'message'=>$message), 200);
+    }
+
+    public function destroy($id)
+	{
+		$msg='';
+		$success=false;
+		$user = User::with('perfil')
+		->with('postulante')
+		->with('evaluador')
+		->find($id);
+
+
+		if($user){
+			$inscripciones=array();
+			$inscripcionesEvaluador=array();
+
+			if($user->group_id==3){
+				$inscripciones=Inscripcion::where('postulante_id','=',$user->postulante->id)->get();
+
+			}
+			if($user->group_id==2){
+
+				$inscripcionesEvaluador=InscripcionEvaluador::where('evaluador_id','=',$user->evaluador->id)->get();
+			}
+
+			if(count($inscripciones)>0 || count($inscripcionesEvaluador)>0){
+				$msg="Usuario se encuentra vinculado a uno o mas concursos";
+			}else{
+
+				Postulante::where('usuario_id','=',$id)->delete();
+				Evaluador::where('usuario_id','=',$id)->delete();
+				User::destroy($id);
+				$success=true;
+			}
+		}else{
+			$msg="Usuario no existe";
+		}
+
+
+
+
+		return Response()->json(array('success' => $success,'message'=>$msg), 201);
+    }
+
+    public function activated(Request $request){
+		$id=$request->query('id');
+		$activated=($request->query('activated')=='true')?true:false;
+		$success=false;
+		$message='';
+		$sendemail=false;
+
+			$user = User::find($id);
+
+			if($activated){
+				$message='activated:true';
+				switch($user->group_id){
+					case 2:
+						$evaluador=Evaluador::where('usuario_id','=',$id)->first();
+						if(!$evaluador){
+							$evaluador=new Evaluador();
+							$evaluador->usuario_id=$id;
+							$evaluador->nombres=$user->first_name;
+							$evaluador->apellidos=$user->last_name;
+							$evaluador->save();
+
+							$user->activated=true;
+							$user->activated_at=new Datetime();
+							$sendemail=true;
+
+
+						}
+						break;
+					case 3:
+						$message='postulante';
+						$postulante=Postulante::where('usuario_id','=',$id)->first();
+						if(!$postulante){
+							$postulante=new Postulante();
+							$postulante->usuario_id=$id;
+							$postulante->save();
+
+							$user->activated=true;
+							$user->activated_at=new Datetime();
+							$sendemail=true;
+						}
+
+						break;
+				}
+				//$this->SendEmail();
+				$user->activated=true;
+				$user->activated_at=new Datetime();
+				$success=true;
+
+				if($sendemail){
+                    Mail::to($email)->send(new MessageUserActivated($user));
+				}
+			}else{
+				$success=true;
+				$user->activated=false;
+			}
+			$user->save();
+
+
+		return Response()->json(array('success' => $success, 'message'=>$message), 200);
 	}
+
+
 }

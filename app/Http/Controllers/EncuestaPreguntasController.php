@@ -5,6 +5,7 @@ use Validator;
 use Illuminate\Http\Request;
 use App\models\EncuestaPregunta;
 use App\Http\Controllers\Controller;
+use App\models\EncuestaPreguntaOpcion;
 
 class EncuestaPreguntasController extends Controller {
 

@@ -61,9 +61,9 @@ class GrupoEvaluacionPostulantesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		$validator = Validator::make($data = Input::all(), GrupoEvaluacionPostulante::$rules);
+		$validator = Validator::make($data = $request->all(), GrupoEvaluacionPostulante::$rules);
 		$entity=null;
 		$success=false;
 		$message='';
@@ -110,12 +110,12 @@ class GrupoEvaluacionPostulantesController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Request $request, $id)
 	{
 		$success=false;
 		$concurso = GrupoEvaluacionPostulante::findOrFail($id);
 
-		$validator = Validator::make($data = Input::all(), GrupoEvaluacionPostulante::$rules);
+		$validator = Validator::make($data = $request->all(), GrupoEvaluacionPostulante::$rules);
 
 		if (!$validator->fails())
 		{

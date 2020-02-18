@@ -522,24 +522,24 @@ return Response()->json($results, 200);
 		$concurso_id=$request->query('concurso_id','');
 
 		$entities = GrupoEvaluacion::with(array('concurso'=>function($q){
-				return $q->with(array('etapas'=>function($q2){
-					return $q2->with(array('etapa'=>function($q3){
-							return $q3->with('TipoEtapa');
-						}));
-					}));
-			}))
-		->with(array('encuestaevaluaciones'=>function($q){
-			return $q->with('encuesta')->with(array('respuestas'=>function($q2){
-				return $q2->with('evaluador');
-			}));
-		}))
-		->with(array('evaluadores'=>function($q){
-				return $q->with(array('inscripcion'=>function($q2){
-					return $q2->with('evaluador');
-				}))->with('evaluaciones');
-			}))
-		->where('concurso_id','=',$concurso_id)
-		->get();
+            return $q->with(array('etapas'=>function($q2){
+                return $q2->with(array('etapa'=>function($q3){
+                        return $q3->with('TipoEtapa');
+                    }));
+                }));
+        }))
+        ->with(array('encuestaevaluaciones'=>function($q){
+            return $q->with('encuesta')->with(array('respuestas'=>function($q2){
+                return $q2->with('evaluador');
+            }));
+        }))
+        ->with(array('evaluadores'=>function($q){
+                return $q->with(array('inscripcion'=>function($q2){
+                    return $q2->with('evaluador');
+                }))->with('evaluaciones');
+            }))
+        ->where('concurso_id','=',$concurso_id)
+        ->get();
 
 		return Response()->json($entities,200);
 	}

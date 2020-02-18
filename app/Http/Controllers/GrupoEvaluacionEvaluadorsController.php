@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
+use Validator;
 use Illuminate\Http\Request;
 use App\models\GrupoEvaluacion;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\models\InscripcionEvaluador;
 use App\models\GrupoEvaluacionEvaluador;
+use App\models\GrupoEvaluacionEvaluadorPermiso;
 
 class GrupoEvaluacionEvaluadorsController extends Controller {
 

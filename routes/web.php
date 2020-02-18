@@ -45,6 +45,7 @@ Route::resource('concursocriterio','ConcursoCriteriosController');
 Route::resource('postulantecategoria','PostulanteCategoriasController');
 Route::resource('postulantecontacto','PostulanteContactosController');
 Route::resource('conflictointeresevaluador','ConflictoInteresEvaluadorsController');
+Route::resource('inscripcionevaluador','InscripcionEvaluadorsController');
 
 //user custom endpoints
 Route::get('/user/resetpassword/request', 'UsersController@ResetPassword');
@@ -54,6 +55,8 @@ Route::get('/user/login/signin', 'UsersController@signin');
 Route::get('/user/validate/unique/{attribute}', 'UsersController@ValidateUnique');
 Route::post('/user/access/activation', 'UsersController@activatedUser');
 Route::get('/user/change/password', 'UsersController@ChangeUserPassword');
+Route::get('/user/login/logout', 'UsersController@logout');
+Route::get('/user/login/activated', 'UsersController@activated');
 
 //concurso custom endpoints
 
@@ -83,10 +86,9 @@ Route::get('evaluador/method/history','EvaluadorsController@History');
 
 //reportes custom endpoints
 Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualCuaderno');
-Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualCuaderno');
 Route::get('reportes/evaluacion-individual-factores-clave','ReportesController@getEvaluacionIndividualFactoresClave');
-Route::get('reportes/evaluacion-individual-cuaderno','ReportesController@getEvaluacionIndividualResumen');
-Route::get('reportes/evaluacion-individual-resumen','ReportesController@getEvaluacionIndividualPorEquipo');
+Route::get('reportes/evaluacion-individual-resumen','ReportesController@getEvaluacionIndividualResumen');
+Route::get('reportes/evaluacion-individual-por-equipo','ReportesController@getEvaluacionIndividualPorEquipo');
 Route::get('reportes/resumen-aprobacion-informe-ejecutivo','ReportesController@getResumenAprobacionInformeEjecutivo');
 Route::get('reportes/resumen-aprobacion-concenso','ReportesController@getResumenAprobacionConcenso');
 Route::post('reportes/export-excel','ReportesController@postExportExcel');

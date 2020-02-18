@@ -2563,9 +2563,6 @@ input[type="button"].btn-block {
 </style>
 </head>
 <body>
-<table>
-<tr><td>HOLAAAA</td></tr>
-</table>
 	{!! $data !!}
 </body>
 </html>

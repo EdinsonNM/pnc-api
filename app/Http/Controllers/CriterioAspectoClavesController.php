@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use App\models\Catalogo;
+use App\models\AspectoClave;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\models\CriterioAspectoClave;
